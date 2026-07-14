@@ -1,0 +1,134 @@
+{
+  "passport": {
+    "fullName": "Иванов Иван Иванович",
+    "birthDate": "15.05.1990",
+    "birthPlace": "г. Москва, Россия",
+    "nationality": "Российская Федерация",
+    "gender": "Мужской",
+    "passportNumber": "45 12 345678",
+    "issuedBy": "Отделом УФМС России по г. Москве",
+    "issueDate": "20.06.2015",
+    "expiryDate": "20.06.2025",
+    "registration": "г. Москва, ул. Тверская, д. 10, кв. 25"
+  },
+  "career": {
+    "currentPosition": "Senior Software Engineer",
+    "company": "ООО «ТехноПро»",
+    "industry": "Информационные технологии",
+    "experience": [
+      {
+        "period": "2020 – настоящее время",
+        "position": "Senior Software Engineer",
+        "company": "ООО «ТехноПро»",
+        "responsibilities": "Разработка архитектуры микросервисов, управление командой из 5 человек"
+      },
+      {
+        "period": "2017 – 2020",
+        "position": "Software Engineer",
+        "company": "АО «Инновационные системы»",
+        "responsibilities": "Разработка веб-приложений на React и Node.js"
+      },
+      {
+        "period": "2015 – 2017",
+        "position": "Junior Developer",
+        "company": "ООО «ВебСтарт»",
+        "responsibilities": "Верстка и разработка фронтенда на JavaScript"
+      }
+    ],
+    "skills": [
+      "JavaScript/TypeScript",
+      "React.js",
+      "Node.js",
+      "Python",
+      "Docker",
+      "SQL",
+      "Git",
+      "CI/CD"
+    ],
+    "languages": [
+      "Русский (родной)",
+      "Английский (Upper-Intermediate)",
+      "Немецкий (базовый)"
+    ]
+  },
+  "family": {
+    "maritalStatus": "Женат",
+    "spouse": {
+      "fullName": "Иванова Мария Петровна",
+      "birthDate": "12.08.1992",
+      "occupation": "Врач-терапевт"
+    },
+    "children": [
+      {
+        "fullName": "Иванов Алексей Иванович",
+        "birthDate": "05.03.2018",
+        "gender": "Мужской"
+      },
+      {
+        "fullName": "Иванова Анна Ивановна",
+        "birthDate": "20.11.2021",
+        "gender": "Женский"
+      }
+    ],
+    "parents": {
+      "father": {
+        "fullName": "Иванов Иван Петрович",
+        "birthDate": "10.02.1965",
+        "occupation": "Инженер"
+      },
+      "mother": {
+        "fullName": "Иванова Елена Сергеевна",
+        "birthDate": "25.07.1967",
+        "occupation": "Учитель"
+      }
+    },
+    "siblings": [
+      {
+        "fullName": "Петрова Ольга Ивановна",
+        "birthDate": "18.12.1995",
+        "relationship": "Сестра"
+      }
+    ]
+  },
+  "education": {
+    "higher": [
+      {
+        "institution": "Московский государственный технический университет им. Н.Э. Баумана",
+        "faculty": "Факультет информатики и систем управления",
+        "specialty": "Прикладная математика и информатика",
+        "degree": "Магистр",
+        "yearStart": 2007,
+        "yearEnd": 2013,
+        "gpa": 4.8
+      }
+    ],
+    "additional": [
+      {
+        "name": "Курс «Full Stack Web Development»",
+        "institution": "Coursera / МФТИ",
+        "year": 2016,
+        "certificate": "Сертификат с отличием"
+      },
+      {
+        "name": "Программа управления проектами (PMP)",
+        "institution": "PMI",
+        "year": 2021,
+        "certificate": "Сертификат PMP"
+      }
+    ],
+    "courses": [
+      {
+        "name": "Machine Learning",
+        "platform": "Coursera (Stanford)",
+        "year": 2019,
+        "hours": 120
+      },
+      {
+        "name": "DevOps Engineering",
+        "platform": "Stepik",
+        "year": 2020,
+        "hours": 80
+      }
+    ]
+  }
+}
