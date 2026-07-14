@@ -15,7 +15,6 @@
 
         <!-- ====== ВЕРХНЯЯ ПАНЕЛЬ ====== -->
         <div class="top-panel">
-            <!-- КНОПКА ДОБАВИТЬ С ВЫПАДАЮЩИМ МЕНЮ -->
             <div class="add-dropdown">
                 <button class="add-main-btn" onclick="toggleDropdown()">➕ Добавить</button>
                 <div class="dropdown-content" id="addDropdown">
@@ -49,9 +48,7 @@
                 </div>
             </div>
 
-            <!-- КНОПКИ ФИЛЬТРОВ -->
             <div class="filter-buttons">
-                <button class="filter-btn active" onclick="filterCards('all')">Все</button>
                 <button class="filter-btn" onclick="filterCards('passport')">🇷🇺 Паспорт</button>
                 <button class="filter-btn" onclick="filterCards('contacts')">📱 Контакты</button>
                 <button class="filter-btn" onclick="filterCards('dates')">📅 Даты</button>
@@ -69,10 +66,9 @@
 
         <!-- ====== ФОРМЫ ДОБАВЛЕНИЯ ====== -->
         <div id="formsContainer">
-            <!-- ====== ПАСПОРТ (РАСШИРЕННАЯ ФОРМА) ====== -->
+            <!-- Паспорт -->
             <div id="passport-form" class="add-form" style="display:none;">
                 <h3>📇 Паспортные данные</h3>
-                
                 <div class="form-section">
                     <label>Основные данные</label>
                     <div class="form-row">
@@ -85,7 +81,6 @@
                     </div>
                     <input id="passport-nationality" placeholder="Гражданство" />
                 </div>
-
                 <div class="form-section">
                     <label>Документ</label>
                     <div class="form-row">
@@ -101,7 +96,6 @@
                         <input id="passport-code" placeholder="Код подразделения" />
                     </div>
                 </div>
-
                 <div class="form-section">
                     <label>Регистрация</label>
                     <div class="form-row">
@@ -110,7 +104,6 @@
                     </div>
                     <input id="passport-reg-date" placeholder="Дата регистрации (ДД.ММ.ГГГГ)" />
                 </div>
-
                 <div class="form-actions">
                     <button class="save-btn" onclick="addPassportFull()">✅ Добавить</button>
                     <button class="cancel-btn" onclick="closeAddForm('passport-form')">❌ Отмена</button>
@@ -176,15 +169,43 @@
                 </div>
             </div>
 
-            <!-- Семья -->
+            <!-- ====== СЕМЬЯ (С ВЫПАДАЮЩИМ МЕНЮ) ====== -->
             <div id="family-form" class="add-form" style="display:none;">
                 <h3>👨‍👩‍👧‍👦 Добавить члена семьи</h3>
+                
                 <div class="form-row">
                     <input id="family-name" placeholder="ФИО" />
                     <input id="family-birth" placeholder="Дата рождения" />
                 </div>
-                <input id="family-type" placeholder="Кто? (ребенок, брат, сестра, отец, мать, супруг)" />
-                <input id="family-occupation" placeholder="Профессия" />
+                
+                <!-- ВЫПАДАЮЩЕЕ МЕНЮ ДЛЯ ВЫБОРА ТИПА -->
+                <div class="form-row">
+                    <div class="select-wrapper">
+                        <label for="family-type-select">Кто это?</label>
+                        <select id="family-type-select" class="form-select">
+                            <option value="">— Выберите —</option>
+                            <option value="отец">👨 Отец</option>
+                            <option value="мать">👩 Мать</option>
+                            <option value="супруг">💑 Супруг</option>
+                            <option value="супруга">💑 Супруга</option>
+                            <option value="сын">👦 Сын</option>
+                            <option value="дочь">👧 Дочь</option>
+                            <option value="ребенок">👶 Ребенок</option>
+                            <option value="брат">👦 Брат</option>
+                            <option value="сестра">👧 Сестра</option>
+                            <option value="дедушка">👴 Дедушка</option>
+                            <option value="бабушка">👵 Бабушка</option>
+                            <option value="другой">👤 Другой</option>
+                        </select>
+                    </div>
+                    <input id="family-occupation" placeholder="Профессия" />
+                </div>
+                
+                <!-- Поле для ручного ввода, если выбран "Другой" -->
+                <div id="family-custom-type-container" style="display:none;">
+                    <input id="family-custom-type" placeholder="Введите свой вариант (например: дядя)" />
+                </div>
+
                 <div class="form-actions">
                     <button class="save-btn" onclick="addFamilyMember()">✅ Добавить</button>
                     <button class="cancel-btn" onclick="closeAddForm('family-form')">❌ Отмена</button>
