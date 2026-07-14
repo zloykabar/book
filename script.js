@@ -62,35 +62,35 @@ let DATA = {
 let idCounter = 10;
 let tabCounter = 0;
 let currentFilter = 'all';
+let currentEditCard = null;
 
 // ============================================
 // ЗАГРУЗКА
 // ============================================
 window.onload = function() {
-    const saved = localStorage.getItem('profileData');
+    var saved = localStorage.getItem('profileData');
     if (saved) {
         try {
             DATA = JSON.parse(saved);
-            const allIds = [];
-            DATA.career.experience.forEach(e => allIds.push(e.id));
-            DATA.family.children.forEach(c => allIds.push(c.id));
-            DATA.family.siblings.forEach(s => allIds.push(s.id));
-            DATA.education.higher.forEach(h => allIds.push(h.id));
-            DATA.education.additional.forEach(a => allIds.push(a.id));
-            DATA.education.courses.forEach(c => allIds.push(c.id));
-            idCounter = allIds.length > 0 ? Math.max(...allIds) + 1 : 1;
-            const customKeys = Object.keys(DATA.customTabs || {});
+            var allIds = [];
+            DATA.career.experience.forEach(function(e) { allIds.push(e.id); });
+            DATA.family.children.forEach(function(c) { allIds.push(c.id); });
+            DATA.family.siblings.forEach(function(s) { allIds.push(s.id); });
+            DATA.education.higher.forEach(function(h) { allIds.push(h.id); });
+            DATA.education.additional.forEach(function(a) { allIds.push(a.id); });
+            DATA.education.courses.forEach(function(c) { allIds.push(c.id); });
+            idCounter = allIds.length > 0 ? Math.max.apply(null, allIds) + 1 : 1;
+            var customKeys = Object.keys(DATA.customTabs || {});
             tabCounter = customKeys.length;
         } catch(e) { console.error(e); }
     }
     renderAll();
     renderCustomTabs();
     
-    // Обработчик для выпадающего меню в семье
-    const select = document.getElementById('family-type-select');
+    var select = document.getElementById('family-type-select');
     if (select) {
         select.addEventListener('change', function() {
-            const customContainer = document.getElementById('family-custom-type-container');
+            var customContainer = document.getElementById('family-custom-type-container');
             if (this.value === 'другой') {
                 customContainer.style.display = 'block';
             } else {
@@ -117,7 +117,6 @@ function toggleDropdown() {
     }
 }
 
-// Закрытие dropdown при клике вне
 document.addEventListener('click', function(e) {
     var dropdown = document.getElementById('addDropdown');
     var btn = document.querySelector('.add-main-btn');
@@ -130,22 +129,17 @@ document.addEventListener('click', function(e) {
 // ============ ОТКРЫТИЕ ФОРМ ============
 // ============================================
 function openAddForm(type) {
-    // Закрываем dropdown
     var dropdown = document.getElementById('addDropdown');
     if (dropdown) dropdown.classList.remove('show');
     
-    // Скрываем все формы
-    var forms = document.querySelectorAll('.add-form');
-    forms.forEach(function(f) { f.style.display = 'none'; });
+    document.querySelectorAll('.add-form').forEach(function(f) { f.style.display = 'none'; });
     
-    // Открываем нужную форму
     var form = document.getElementById(type + '-form');
     if (form) {
         form.style.display = 'block';
         form.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else {
-        console.error('Форма не найдена: ' + type + '-form');
-        alert('Ошибка: форма не найдена!');
+        alert('Форма не найдена: ' + type);
     }
 }
 
@@ -166,15 +160,15 @@ function filterCards(type) {
         document.querySelectorAll('.filter-btn').forEach(function(btn) { btn.classList.remove('active'); });
         document.querySelectorAll('.filter-btn').forEach(function(btn) {
             var text = btn.textContent;
-            if (text.includes('Паспорт') && type === 'passport') btn.classList.add('active');
-            if (text.includes('Контакты') && type === 'contacts') btn.classList.add('active');
-            if (text.includes('Даты') && type === 'dates') btn.classList.add('active');
-            if (text.includes('Карьера') && type === 'career') btn.classList.add('active');
-            if (text.includes('Семья') && type === 'family') btn.classList.add('active');
-            if (text.includes('Образование') && type === 'education') btn.classList.add('active');
+            if (text.indexOf('Паспорт') !== -1 && type === 'passport') btn.classList.add('active');
+            if (text.indexOf('Контакты') !== -1 && type === 'contacts') btn.classList.add('active');
+            if (text.indexOf('Даты') !== -1 && type === 'dates') btn.classList.add('active');
+            if (text.indexOf('Карьера') !== -1 && type === 'career') btn.classList.add('active');
+            if (text.indexOf('Семья') !== -1 && type === 'family') btn.classList.add('active');
+            if (text.indexOf('Образование') !== -1 && type === 'education') btn.classList.add('active');
         });
         document.querySelectorAll('#customFilterButtons .filter-btn').forEach(function(btn) {
-            if (btn.textContent.includes(type.replace('custom_', ''))) {
+            if (btn.textContent.indexOf(type.replace('custom_', '')) !== -1) {
                 btn.classList.add('active');
             }
         });
@@ -198,17 +192,15 @@ function renderCards() {
     var filter = currentFilter;
     var showAll = filter === 'all';
     
-    // ====== ПАСПОРТ - ОДНА КАРТОЧКА ======
+    // ====== ПАСПОРТ ======
     if (showAll || filter === 'passport') {
         var passportData = DATA.passport || {};
         var hasData = Object.keys(passportData).length > 0;
-        
         if (hasData) {
             var details = {};
             Object.keys(passportData).forEach(function(key) {
                 details[key] = passportData[key] || '—';
             });
-            
             var mainValue = passportData['ФИО'] || 'Паспортные данные';
             var subValue = '';
             if (passportData['Серия'] && passportData['Номер']) {
@@ -218,7 +210,6 @@ function renderCards() {
             } else if (passportData['Номер']) {
                 subValue = '№ ' + passportData['Номер'];
             }
-            
             allCards.push({
                 id: 'passport_all',
                 type: 'passport',
@@ -231,21 +222,18 @@ function renderCards() {
         }
     }
     
-    // ====== КОНТАКТЫ - ОДНА КАРТОЧКА ======
+    // ====== КОНТАКТЫ ======
     if (showAll || filter === 'contacts') {
         var contactsData = DATA.contacts || {};
         var hasData = Object.keys(contactsData).length > 0;
-        
         if (hasData) {
             var details = {};
             Object.keys(contactsData).forEach(function(key) {
                 details[key] = contactsData[key] || '—';
             });
-            
             var keys = Object.keys(contactsData);
             var mainValue = keys.length > 0 ? contactsData[keys[0]] : 'Нет контактов';
             var subValue = keys.length > 0 ? keys.length + ' контактов' : '';
-            
             allCards.push({
                 id: 'contacts_all',
                 type: 'contacts',
@@ -258,21 +246,18 @@ function renderCards() {
         }
     }
     
-    // ====== ДАТЫ - ОДНА КАРТОЧКА ======
+    // ====== ДАТЫ ======
     if (showAll || filter === 'dates') {
         var datesData = DATA.dates || {};
         var hasData = Object.keys(datesData).length > 0;
-        
         if (hasData) {
             var details = {};
             Object.keys(datesData).forEach(function(key) {
                 details[key] = datesData[key] || '—';
             });
-            
             var keys = Object.keys(datesData);
             var mainValue = keys.length > 0 ? datesData[keys[0]] : 'Нет дат';
             var subValue = keys.length > 0 ? keys.length + ' дат' : '';
-            
             allCards.push({
                 id: 'dates_all',
                 type: 'dates',
@@ -304,7 +289,6 @@ function renderCards() {
                 }
             });
         });
-        
         DATA.career.skills.forEach(function(skill, i) {
             allCards.push({
                 id: 'skill_' + i,
@@ -317,7 +301,6 @@ function renderCards() {
                 details: { 'Навык': skill }
             });
         });
-        
         DATA.career.languages.forEach(function(lang, i) {
             allCards.push({
                 id: 'language_' + i,
@@ -350,7 +333,6 @@ function renderCards() {
                 }
             });
         }
-        
         DATA.family.children.forEach(function(child) {
             allCards.push({
                 id: 'family_child_' + child.id,
@@ -367,7 +349,6 @@ function renderCards() {
                 }
             });
         });
-        
         if (DATA.family.parents.father) {
             var f = DATA.family.parents.father;
             allCards.push({
@@ -400,7 +381,6 @@ function renderCards() {
                 }
             });
         }
-        
         DATA.family.siblings.forEach(function(sib) {
             allCards.push({
                 id: 'family_sibling_' + sib.id,
@@ -438,7 +418,6 @@ function renderCards() {
                 }
             });
         });
-        
         DATA.education.courses.forEach(function(item) {
             allCards.push({
                 id: 'edu_course_' + item.id,
@@ -465,17 +444,14 @@ function renderCards() {
             if (showAll || filter === 'custom_' + tabId) {
                 var tabData = tab.data || {};
                 var hasData = Object.keys(tabData).length > 0;
-                
                 if (hasData) {
                     var details = {};
                     Object.keys(tabData).forEach(function(key) {
                         details[key] = tabData[key] || '—';
                     });
-                    
                     var keys = Object.keys(tabData);
                     var mainValue = keys.length > 0 ? tabData[keys[0]] : 'Нет данных';
                     var subValue = keys.length > 0 ? keys.length + ' полей' : '';
-                    
                     allCards.push({
                         id: 'custom_' + tabId + '_all',
                         type: 'custom',
@@ -531,9 +507,11 @@ function renderCards() {
             deleteAttr = 'onclick="event.stopPropagation(); deleteCard(\'' + card.id + '\')"';
         }
         
-        var detailStr = JSON.stringify(card.details).replace(/"/g, '&quot;');
+        var safeDetails = JSON.stringify(card.details).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        var safeId = card.id.replace(/'/g, '\\\'');
+        var safeLabel = card.label.replace(/'/g, '\\\'');
         
-        html += '<div class="card-item type-' + card.type + '" onclick="openModal(\'' + card.label + '\', \'' + detailStr + '\')">';
+        html += '<div class="card-item type-' + card.type + '" onclick="openModal(\'' + safeId + '\', \'' + safeLabel + '\', \'' + safeDetails + '\')">';
         html += '<button class="card-delete" ' + deleteAttr + '>✕</button>';
         html += '<div class="card-label">' + card.label + '</div>';
         html += '<div class="card-value">' + card.value + '</div>';
@@ -547,20 +525,35 @@ function renderCards() {
 // ============================================
 // ============ МОДАЛЬНОЕ ОКНО ============
 // ============================================
-function openModal(title, detailsJSON) {
+function openModal(cardId, title, detailsJSON) {
     var modal = document.getElementById('cardModal');
     if (!modal) return;
     
-    document.getElementById('modalTitle').textContent = title;
+    currentEditCard = cardId;
+    document.getElementById('modalTitle').textContent = title || 'Подробности';
     
     var html = '';
     try {
-        var details = JSON.parse(detailsJSON);
-        Object.keys(details).forEach(function(key) {
-            html += '<div class="detail-row"><span class="detail-label">' + key + '</span><span class="detail-value">' + details[key] + '</span></div>';
-        });
+        var decoded = detailsJSON.replace(/&quot;/g, '"').replace(/&#39;/g, "'");
+        var details = JSON.parse(decoded);
+        
+        if (typeof details === 'object' && details !== null) {
+            Object.keys(details).forEach(function(key) {
+                var value = details[key];
+                if (typeof value === 'string' && value.indexOf('\n') !== -1) {
+                    value = value.replace(/\n/g, '<br>');
+                }
+                html += '<div class="detail-row">';
+                html += '<span class="detail-label">' + key + '</span>';
+                html += '<span class="detail-value">' + (value || '—') + '</span>';
+                html += '</div>';
+            });
+        } else {
+            html = '<p>Нет данных для отображения</p>';
+        }
     } catch(e) {
-        html = '<p>Ошибка отображения</p>';
+        console.error('Ошибка парсинга:', e);
+        html = '<p style="color:red;">Ошибка отображения данных</p>';
     }
     
     document.getElementById('modalBody').innerHTML = html;
@@ -577,14 +570,361 @@ function closeModal(event) {
     }
 }
 
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeModal();
+// ============================================
+// ============ РЕДАКТИРОВАНИЕ ============
+// ============================================
+function openEditModal() {
+    if (!currentEditCard) {
+        alert('Не выбрана карточка для редактирования');
+        return;
     }
-});
+    
+    closeModal();
+    
+    var editModal = document.getElementById('editModal');
+    var editBody = document.getElementById('editModalBody');
+    
+    var editData = null;
+    var editType = '';
+    
+    // Проверяем опыт работы
+    if (currentEditCard.indexOf('career_exp_') === 0) {
+        var id = parseInt(currentEditCard.split('_')[2]);
+        var item = DATA.career.experience.find(function(e) { return e.id === id; });
+        if (item) {
+            editData = item;
+            editType = 'experience';
+        }
+    }
+    
+    // Проверяем навыки
+    if (!editData && currentEditCard.indexOf('skill_') === 0) {
+        var index = parseInt(currentEditCard.split('_')[1]);
+        if (DATA.career.skills[index]) {
+            editData = { value: DATA.career.skills[index], index: index };
+            editType = 'skill';
+        }
+    }
+    
+    // Проверяем языки
+    if (!editData && currentEditCard.indexOf('language_') === 0) {
+        var index = parseInt(currentEditCard.split('_')[1]);
+        if (DATA.career.languages[index]) {
+            editData = { value: DATA.career.languages[index], index: index };
+            editType = 'language';
+        }
+    }
+    
+    // Проверяем образование
+    if (!editData && currentEditCard.indexOf('edu_higher_') === 0) {
+        var id = parseInt(currentEditCard.split('_')[2]);
+        var item = DATA.education.higher.find(function(e) { return e.id === id; });
+        if (item) {
+            editData = item;
+            editType = 'higher';
+        }
+    }
+    
+    // Проверяем курсы
+    if (!editData && currentEditCard.indexOf('edu_course_') === 0) {
+        var id = parseInt(currentEditCard.split('_')[2]);
+        var item = DATA.education.courses.find(function(c) { return c.id === id; });
+        if (item) {
+            editData = item;
+            editType = 'course';
+        }
+    }
+    
+    // Проверяем семью - дети
+    if (!editData && currentEditCard.indexOf('family_child_') === 0) {
+        var id = parseInt(currentEditCard.split('_')[2]);
+        var item = DATA.family.children.find(function(c) { return c.id === id; });
+        if (item) {
+            editData = item;
+            editType = 'family_child';
+        }
+    }
+    
+    // Проверяем семью - братья/сестры
+    if (!editData && currentEditCard.indexOf('family_sibling_') === 0) {
+        var id = parseInt(currentEditCard.split('_')[2]);
+        var item = DATA.family.siblings.find(function(s) { return s.id === id; });
+        if (item) {
+            editData = item;
+            editType = 'family_sibling';
+        }
+    }
+    
+    // Проверяем семью - супруг
+    if (!editData && currentEditCard === 'family_spouse') {
+        if (DATA.family.spouse) {
+            editData = DATA.family.spouse;
+            editType = 'family_spouse';
+        }
+    }
+    
+    // Проверяем семью - отец
+    if (!editData && currentEditCard === 'family_father') {
+        if (DATA.family.parents.father) {
+            editData = DATA.family.parents.father;
+            editType = 'family_father';
+        }
+    }
+    
+    // Проверяем семью - мать
+    if (!editData && currentEditCard === 'family_mother') {
+        if (DATA.family.parents.mother) {
+            editData = DATA.family.parents.mother;
+            editType = 'family_mother';
+        }
+    }
+    
+    if (!editData) {
+        alert('Редактирование для этого типа карточки пока не поддерживается');
+        return;
+    }
+    
+    var formHtml = '';
+    
+    if (editType === 'experience') {
+        formHtml = `
+            <div class="form-section">
+                <label>Компания</label>
+                <input id="edit-company" value="${editData.company || ''}">
+            </div>
+            <div class="form-section">
+                <label>Должность</label>
+                <input id="edit-position" value="${editData.position || ''}">
+            </div>
+            <div class="form-section">
+                <label>Период</label>
+                <input id="edit-period" value="${editData.period || ''}">
+            </div>
+            <div class="form-section">
+                <label>Обязанности</label>
+                <textarea id="edit-responsibilities" rows="3">${editData.responsibilities || ''}</textarea>
+            </div>
+        `;
+    } else if (editType === 'skill') {
+        formHtml = `
+            <div class="form-section">
+                <label>Навык</label>
+                <input id="edit-skill" value="${editData.value || ''}">
+            </div>
+        `;
+    } else if (editType === 'language') {
+        formHtml = `
+            <div class="form-section">
+                <label>Язык</label>
+                <input id="edit-language" value="${editData.value || ''}">
+            </div>
+        `;
+    } else if (editType === 'higher') {
+        formHtml = `
+            <div class="form-section">
+                <label>Учебное заведение</label>
+                <input id="edit-institution" value="${editData.institution || ''}">
+            </div>
+            <div class="form-section">
+                <label>Специальность</label>
+                <input id="edit-specialty" value="${editData.specialty || ''}">
+            </div>
+            <div class="form-section">
+                <label>Степень</label>
+                <input id="edit-degree" value="${editData.degree || ''}">
+            </div>
+            <div class="form-section">
+                <label>Год окончания</label>
+                <input id="edit-year" value="${editData.yearEnd || ''}">
+            </div>
+        `;
+    } else if (editType === 'course') {
+        formHtml = `
+            <div class="form-section">
+                <label>Название курса</label>
+                <input id="edit-course-name" value="${editData.name || ''}">
+            </div>
+            <div class="form-section">
+                <label>Платформа</label>
+                <input id="edit-course-platform" value="${editData.platform || ''}">
+            </div>
+            <div class="form-section">
+                <label>Год</label>
+                <input id="edit-course-year" value="${editData.year || ''}">
+            </div>
+        `;
+    } else if (editType === 'family_child' || editType === 'family_sibling') {
+        formHtml = `
+            <div class="form-section">
+                <label>Имя</label>
+                <input id="edit-name" value="${editData.name || ''}">
+            </div>
+            <div class="form-section">
+                <label>Дата рождения</label>
+                <input id="edit-birth" value="${editData.birthDate || ''}">
+            </div>
+            ${editType === 'family_child' ? `
+            <div class="form-section">
+                <label>Пол</label>
+                <input id="edit-gender" value="${editData.gender || ''}">
+            </div>` : `
+            <div class="form-section">
+                <label>Кто</label>
+                <input id="edit-relationship" value="${editData.relationship || ''}">
+            </div>`}
+        `;
+    } else if (editType === 'family_spouse' || editType === 'family_father' || editType === 'family_mother') {
+        formHtml = `
+            <div class="form-section">
+                <label>Имя</label>
+                <input id="edit-name" value="${editData.name || ''}">
+            </div>
+            <div class="form-section">
+                <label>Дата рождения</label>
+                <input id="edit-birth" value="${editData.birthDate || ''}">
+            </div>
+            <div class="form-section">
+                <label>Профессия</label>
+                <input id="edit-occupation" value="${editData.occupation || ''}">
+            </div>
+        `;
+    }
+    
+    editBody.innerHTML = formHtml;
+    editModal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeEditModal(event) {
+    if (event && event.target !== event.currentTarget) return;
+    var modal = document.getElementById('editModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+}
+
+function saveEdit() {
+    if (!currentEditCard) {
+        alert('Нет данных для сохранения');
+        return;
+    }
+    
+    if (currentEditCard.indexOf('career_exp_') === 0) {
+        var id = parseInt(currentEditCard.split('_')[2]);
+        var item = DATA.career.experience.find(function(e) { return e.id === id; });
+        if (item) {
+            var companyEl = document.getElementById('edit-company');
+            var positionEl = document.getElementById('edit-position');
+            var periodEl = document.getElementById('edit-period');
+            var respEl = document.getElementById('edit-responsibilities');
+            
+            if (companyEl) item.company = companyEl.value.trim() || item.company;
+            if (positionEl) item.position = positionEl.value.trim() || item.position;
+            if (periodEl) item.period = periodEl.value.trim() || item.period;
+            if (respEl) item.responsibilities = respEl.value.trim() || item.responsibilities;
+        }
+    } else if (currentEditCard.indexOf('skill_') === 0) {
+        var index = parseInt(currentEditCard.split('_')[1]);
+        var skillEl = document.getElementById('edit-skill');
+        if (skillEl && skillEl.value.trim()) {
+            DATA.career.skills[index] = skillEl.value.trim();
+        }
+    } else if (currentEditCard.indexOf('language_') === 0) {
+        var index = parseInt(currentEditCard.split('_')[1]);
+        var langEl = document.getElementById('edit-language');
+        if (langEl && langEl.value.trim()) {
+            DATA.career.languages[index] = langEl.value.trim();
+        }
+    } else if (currentEditCard.indexOf('edu_higher_') === 0) {
+        var id = parseInt(currentEditCard.split('_')[2]);
+        var item = DATA.education.higher.find(function(e) { return e.id === id; });
+        if (item) {
+            var instEl = document.getElementById('edit-institution');
+            var specEl = document.getElementById('edit-specialty');
+            var degEl = document.getElementById('edit-degree');
+            var yearEl = document.getElementById('edit-year');
+            
+            if (instEl) item.institution = instEl.value.trim() || item.institution;
+            if (specEl) item.specialty = specEl.value.trim() || item.specialty;
+            if (degEl) item.degree = degEl.value.trim() || item.degree;
+            if (yearEl) item.yearEnd = yearEl.value.trim() || item.yearEnd;
+        }
+    } else if (currentEditCard.indexOf('edu_course_') === 0) {
+        var id = parseInt(currentEditCard.split('_')[2]);
+        var item = DATA.education.courses.find(function(c) { return c.id === id; });
+        if (item) {
+            var nameEl = document.getElementById('edit-course-name');
+            var platEl = document.getElementById('edit-course-platform');
+            var yearEl = document.getElementById('edit-course-year');
+            
+            if (nameEl) item.name = nameEl.value.trim() || item.name;
+            if (platEl) item.platform = platEl.value.trim() || item.platform;
+            if (yearEl) item.year = yearEl.value.trim() || item.year;
+        }
+    } else if (currentEditCard.indexOf('family_child_') === 0) {
+        var id = parseInt(currentEditCard.split('_')[2]);
+        var item = DATA.family.children.find(function(c) { return c.id === id; });
+        if (item) {
+            var nameEl = document.getElementById('edit-name');
+            var birthEl = document.getElementById('edit-birth');
+            var genderEl = document.getElementById('edit-gender');
+            
+            if (nameEl) item.name = nameEl.value.trim() || item.name;
+            if (birthEl) item.birthDate = birthEl.value.trim() || item.birthDate;
+            if (genderEl) item.gender = genderEl.value.trim() || item.gender;
+        }
+    } else if (currentEditCard.indexOf('family_sibling_') === 0) {
+        var id = parseInt(currentEditCard.split('_')[2]);
+        var item = DATA.family.siblings.find(function(s) { return s.id === id; });
+        if (item) {
+            var nameEl = document.getElementById('edit-name');
+            var birthEl = document.getElementById('edit-birth');
+            var relEl = document.getElementById('edit-relationship');
+            
+            if (nameEl) item.name = nameEl.value.trim() || item.name;
+            if (birthEl) item.birthDate = birthEl.value.trim() || item.birthDate;
+            if (relEl) item.relationship = relEl.value.trim() || item.relationship;
+        }
+    } else if (currentEditCard === 'family_spouse') {
+        if (DATA.family.spouse) {
+            var nameEl = document.getElementById('edit-name');
+            var birthEl = document.getElementById('edit-birth');
+            var occEl = document.getElementById('edit-occupation');
+            
+            if (nameEl) DATA.family.spouse.name = nameEl.value.trim() || DATA.family.spouse.name;
+            if (birthEl) DATA.family.spouse.birthDate = birthEl.value.trim() || DATA.family.spouse.birthDate;
+            if (occEl) DATA.family.spouse.occupation = occEl.value.trim() || DATA.family.spouse.occupation;
+        }
+    } else if (currentEditCard === 'family_father') {
+        if (DATA.family.parents.father) {
+            var nameEl = document.getElementById('edit-name');
+            var birthEl = document.getElementById('edit-birth');
+            var occEl = document.getElementById('edit-occupation');
+            
+            if (nameEl) DATA.family.parents.father.name = nameEl.value.trim() || DATA.family.parents.father.name;
+            if (birthEl) DATA.family.parents.father.birthDate = birthEl.value.trim() || DATA.family.parents.father.birthDate;
+            if (occEl) DATA.family.parents.father.occupation = occEl.value.trim() || DATA.family.parents.father.occupation;
+        }
+    } else if (currentEditCard === 'family_mother') {
+        if (DATA.family.parents.mother) {
+            var nameEl = document.getElementById('edit-name');
+            var birthEl = document.getElementById('edit-birth');
+            var occEl = document.getElementById('edit-occupation');
+            
+            if (nameEl) DATA.family.parents.mother.name = nameEl.value.trim() || DATA.family.parents.mother.name;
+            if (birthEl) DATA.family.parents.mother.birthDate = birthEl.value.trim() || DATA.family.parents.mother.birthDate;
+            if (occEl) DATA.family.parents.mother.occupation = occEl.value.trim() || DATA.family.parents.mother.occupation;
+        }
+    }
+    
+    closeEditModal();
+    renderAll();
+    alert('✅ Данные обновлены!');
+}
 
 // ============================================
-// ============ ДОБАВЛЕНИЕ ПАСПОРТА ============
+// ============ ФУНКЦИИ ДОБАВЛЕНИЯ ============
 // ============================================
 function addPassportFull() {
     var fields = {
@@ -620,9 +960,6 @@ function addPassportFull() {
     renderAll();
 }
 
-// ============================================
-// ============ ДОБАВЛЕНИЕ КОНТАКТОВ ============
-// ============================================
 function addContactsField() {
     var key = document.getElementById('contacts-type').value.trim();
     var value = document.getElementById('contacts-value').value.trim();
@@ -635,9 +972,6 @@ function addContactsField() {
     renderAll();
 }
 
-// ============================================
-// ============ ДОБАВЛЕНИЕ ДАТ ============
-// ============================================
 function addDatesField() {
     var key = document.getElementById('dates-name').value.trim();
     var value = document.getElementById('dates-value').value.trim();
@@ -650,9 +984,6 @@ function addDatesField() {
     renderAll();
 }
 
-// ============================================
-// ============ ДОБАВЛЕНИЕ КАРЬЕРЫ ============
-// ============================================
 function addCareerExperience() {
     var period = document.getElementById('career-period').value.trim();
     var position = document.getElementById('career-position').value.trim();
@@ -686,9 +1017,6 @@ function addLanguageField() {
     renderAll();
 }
 
-// ============================================
-// ============ ДОБАВЛЕНИЕ СЕМЬИ ============
-// ============================================
 function addFamilyMember() {
     var name = document.getElementById('family-name').value.trim();
     var birth = document.getElementById('family-birth').value.trim();
@@ -788,9 +1116,6 @@ function addFamilyMember() {
     renderAll();
 }
 
-// ============================================
-// ============ ДОБАВЛЕНИЕ ОБРАЗОВАНИЯ ============
-// ============================================
 function addEducationField() {
     var institution = document.getElementById('edu-institution').value.trim();
     var specialty = document.getElementById('edu-specialty').value.trim();
@@ -1031,7 +1356,7 @@ function handleFileUpload(event) {
             DATA.education.higher.forEach(function(h) { allIds.push(h.id); });
             DATA.education.additional.forEach(function(a) { allIds.push(a.id); });
             DATA.education.courses.forEach(function(c) { allIds.push(c.id); });
-            idCounter = allIds.length > 0 ? Math.max(...allIds) + 1 : 1;
+            idCounter = allIds.length > 0 ? Math.max.apply(null, allIds) + 1 : 1;
             renderAll();
             renderCustomTabs();
             alert('✅ Данные загружены!');
