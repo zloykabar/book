@@ -84,6 +84,19 @@ window.onload = function() {
     }
     renderAll();
     renderCustomTabs();
+    
+    // Обработчик для выпадающего меню в семье
+    const select = document.getElementById('family-type-select');
+    if (select) {
+        select.addEventListener('change', function() {
+            const customContainer = document.getElementById('family-custom-type-container');
+            if (this.value === 'другой') {
+                customContainer.style.display = 'block';
+            } else {
+                customContainer.style.display = 'none';
+            }
+        });
+    }
 };
 
 // ============================================
@@ -98,13 +111,15 @@ function saveToStorage() {
 // ============================================
 function toggleDropdown() {
     const dropdown = document.getElementById('addDropdown');
-    dropdown.classList.toggle('show');
+    if (dropdown) {
+        dropdown.classList.toggle('show');
+    }
 }
 
 document.addEventListener('click', function(e) {
     const dropdown = document.getElementById('addDropdown');
     const btn = document.querySelector('.add-main-btn');
-    if (!dropdown.contains(e.target) && e.target !== btn) {
+    if (dropdown && btn && !dropdown.contains(e.target) && e.target !== btn) {
         dropdown.classList.remove('show');
     }
 });
@@ -113,7 +128,9 @@ document.addEventListener('click', function(e) {
 // ============ ОТКРЫТИЕ ФОРМ ============
 // ============================================
 function openAddForm(type) {
-    document.getElementById('addDropdown').classList.remove('show');
+    const dropdown = document.getElementById('addDropdown');
+    if (dropdown) dropdown.classList.remove('show');
+    
     document.querySelectorAll('.add-form').forEach(f => f.style.display = 'none');
     const form = document.getElementById(type + '-form');
     if (form) {
@@ -130,17 +147,27 @@ function closeAddForm(formId) {
 // ============ ФИЛЬТРЫ ============
 // ============================================
 function filterCards(type) {
-    currentFilter = type;
-    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        if (btn.textContent === 'Все' && type === 'all') btn.classList.add('active');
-        if (btn.textContent.includes('Паспорт') && type === 'passport') btn.classList.add('active');
-        if (btn.textContent.includes('Контакты') && type === 'contacts') btn.classList.add('active');
-        if (btn.textContent.includes('Даты') && type === 'dates') btn.classList.add('active');
-        if (btn.textContent.includes('Карьера') && type === 'career') btn.classList.add('active');
-        if (btn.textContent.includes('Семья') && type === 'family') btn.classList.add('active');
-        if (btn.textContent.includes('Образование') && type === 'education') btn.classList.add('active');
-    });
+    if (currentFilter === type) {
+        currentFilter = 'all';
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    } else {
+        currentFilter = type;
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            const text = btn.textContent;
+            if (text.includes('Паспорт') && type === 'passport') btn.classList.add('active');
+            if (text.includes('Контакты') && type === 'contacts') btn.classList.add('active');
+            if (text.includes('Даты') && type === 'dates') btn.classList.add('active');
+            if (text.includes('Карьера') && type === 'career') btn.classList.add('active');
+            if (text.includes('Семья') && type === 'family') btn.classList.add('active');
+            if (text.includes('Образование') && type === 'education') btn.classList.add('active');
+        });
+        document.querySelectorAll('#customFilterButtons .filter-btn').forEach(btn => {
+            if (btn.textContent.includes(type.replace('custom_', ''))) {
+                btn.classList.add('active');
+            }
+        });
+    }
     renderCards();
 }
 
@@ -154,11 +181,14 @@ function renderAll() {
 
 function renderCards() {
     const container = document.getElementById('cardsContainer');
+    if (!container) return;
+    
     let allCards = [];
     let filter = currentFilter;
+    const showAll = filter === 'all';
     
-    // Паспорт - собираем все поля как карточки
-    if (filter === 'all' || filter === 'passport') {
+    // Паспорт
+    if (showAll || filter === 'passport') {
         const passportFields = {
             'ФИО': DATA.passport['ФИО'],
             'Дата рождения': DATA.passport['Дата рождения'],
@@ -191,7 +221,7 @@ function renderCards() {
     }
     
     // Контакты
-    if (filter === 'all' || filter === 'contacts') {
+    if (showAll || filter === 'contacts') {
         Object.keys(DATA.contacts || {}).forEach(key => {
             allCards.push({
                 id: 'contacts_' + key,
@@ -205,7 +235,7 @@ function renderCards() {
     }
     
     // Даты
-    if (filter === 'all' || filter === 'dates') {
+    if (showAll || filter === 'dates') {
         Object.keys(DATA.dates || {}).forEach(key => {
             allCards.push({
                 id: 'dates_' + key,
@@ -218,8 +248,8 @@ function renderCards() {
         });
     }
     
-    // Карьера - опыт работы
-    if (filter === 'all' || filter === 'career') {
+    // Карьера
+    if (showAll || filter === 'career') {
         DATA.career.experience.forEach(exp => {
             allCards.push({
                 id: 'career_exp_' + exp.id,
@@ -237,10 +267,7 @@ function renderCards() {
                 }
             });
         });
-    }
-    
-    // Навыки
-    if (filter === 'all' || filter === 'career') {
+        
         DATA.career.skills.forEach((skill, i) => {
             allCards.push({
                 id: 'skill_' + i,
@@ -253,10 +280,7 @@ function renderCards() {
                 details: { 'Навык': skill }
             });
         });
-    }
-    
-    // Языки
-    if (filter === 'all' || filter === 'career') {
+        
         DATA.career.languages.forEach((lang, i) => {
             allCards.push({
                 id: 'language_' + i,
@@ -271,8 +295,8 @@ function renderCards() {
         });
     }
     
-    // Семья - супруг
-    if (filter === 'all' || filter === 'family') {
+    // Семья
+    if (showAll || filter === 'family') {
         if (DATA.family.spouse) {
             const s = DATA.family.spouse;
             allCards.push({
@@ -289,10 +313,7 @@ function renderCards() {
                 }
             });
         }
-    }
-    
-    // Семья - дети
-    if (filter === 'all' || filter === 'family') {
+        
         DATA.family.children.forEach(child => {
             allCards.push({
                 id: 'family_child_' + child.id,
@@ -309,10 +330,7 @@ function renderCards() {
                 }
             });
         });
-    }
-    
-    // Семья - родители
-    if (filter === 'all' || filter === 'family') {
+        
         if (DATA.family.parents.father) {
             const f = DATA.family.parents.father;
             allCards.push({
@@ -345,10 +363,7 @@ function renderCards() {
                 }
             });
         }
-    }
-    
-    // Семья - братья/сёстры
-    if (filter === 'all' || filter === 'family') {
+        
         DATA.family.siblings.forEach(sib => {
             allCards.push({
                 id: 'family_sibling_' + sib.id,
@@ -367,8 +382,8 @@ function renderCards() {
         });
     }
     
-    // Образование - высшее
-    if (filter === 'all' || filter === 'education') {
+    // Образование
+    if (showAll || filter === 'education') {
         DATA.education.higher.forEach(item => {
             allCards.push({
                 id: 'edu_higher_' + item.id,
@@ -386,10 +401,7 @@ function renderCards() {
                 }
             });
         });
-    }
-    
-    // Образование - курсы
-    if (filter === 'all' || filter === 'education') {
+        
         DATA.education.courses.forEach(item => {
             allCards.push({
                 id: 'edu_course_' + item.id,
@@ -413,7 +425,7 @@ function renderCards() {
     if (DATA.customTabs) {
         Object.keys(DATA.customTabs).forEach(tabId => {
             const tab = DATA.customTabs[tabId];
-            if (filter === 'all' || filter === 'custom_' + tabId) {
+            if (showAll || filter === 'custom_' + tabId) {
                 Object.keys(tab.data || {}).forEach(key => {
                     allCards.push({
                         id: 'custom_' + tabId + '_' + key,
@@ -435,7 +447,6 @@ function renderCards() {
         });
     }
     
-    // Рендерим карточки
     if (allCards.length === 0) {
         container.innerHTML = `
             <div class="empty-message">
@@ -448,18 +459,32 @@ function renderCards() {
     
     let html = '';
     allCards.forEach(card => {
-        const deleteAttr = card.deleteType === 'experience' ? `onclick="event.stopPropagation(); deleteExperience(${card.deleteId})"` :
-                          card.deleteType === 'skill' ? `onclick="event.stopPropagation(); deleteSkill(${card.deleteIndex})"` :
-                          card.deleteType === 'language' ? `onclick="event.stopPropagation(); deleteLanguage(${card.deleteIndex})"` :
-                          card.deleteType === 'child' ? `onclick="event.stopPropagation(); deleteChild(${card.deleteId})"` :
-                          card.deleteType === 'sibling' ? `onclick="event.stopPropagation(); deleteSibling(${card.deleteId})"` :
-                          card.deleteType === 'father' ? `onclick="event.stopPropagation(); deleteParent('father')"` :
-                          card.deleteType === 'mother' ? `onclick="event.stopPropagation(); deleteParent('mother')"` :
-                          card.deleteType === 'spouse' ? `onclick="event.stopPropagation(); deleteSpouse()"` :
-                          card.deleteType === 'higher' ? `onclick="event.stopPropagation(); deleteHigher(${card.deleteId})"` :
-                          card.deleteType === 'course' ? `onclick="event.stopPropagation(); deleteCourse(${card.deleteId})"` :
-                          card.deleteType === 'customField' ? `onclick="event.stopPropagation(); deleteCustomField('${card.customTabId}', '${card.customKey}')"` :
-                          `onclick="event.stopPropagation(); deleteCard('${card.id}')"`;
+        let deleteAttr = '';
+        if (card.deleteType === 'experience') {
+            deleteAttr = `onclick="event.stopPropagation(); deleteExperience(${card.deleteId})"`;
+        } else if (card.deleteType === 'skill') {
+            deleteAttr = `onclick="event.stopPropagation(); deleteSkill(${card.deleteIndex})"`;
+        } else if (card.deleteType === 'language') {
+            deleteAttr = `onclick="event.stopPropagation(); deleteLanguage(${card.deleteIndex})"`;
+        } else if (card.deleteType === 'child') {
+            deleteAttr = `onclick="event.stopPropagation(); deleteChild(${card.deleteId})"`;
+        } else if (card.deleteType === 'sibling') {
+            deleteAttr = `onclick="event.stopPropagation(); deleteSibling(${card.deleteId})"`;
+        } else if (card.deleteType === 'father') {
+            deleteAttr = `onclick="event.stopPropagation(); deleteParent('father')"`;
+        } else if (card.deleteType === 'mother') {
+            deleteAttr = `onclick="event.stopPropagation(); deleteParent('mother')"`;
+        } else if (card.deleteType === 'spouse') {
+            deleteAttr = `onclick="event.stopPropagation(); deleteSpouse()"`;
+        } else if (card.deleteType === 'higher') {
+            deleteAttr = `onclick="event.stopPropagation(); deleteHigher(${card.deleteId})"`;
+        } else if (card.deleteType === 'course') {
+            deleteAttr = `onclick="event.stopPropagation(); deleteCourse(${card.deleteId})"`;
+        } else if (card.deleteType === 'customField') {
+            deleteAttr = `onclick="event.stopPropagation(); deleteCustomField('${card.customTabId}', '${card.customKey}')"`;
+        } else {
+            deleteAttr = `onclick="event.stopPropagation(); deleteCard('${card.id}')"`;
+        }
         
         const detailStr = JSON.stringify(card.details).replace(/"/g, '&quot;');
         
@@ -481,18 +506,24 @@ function renderCards() {
 // ============================================
 function openModal(title, detailsJSON) {
     const modal = document.getElementById('cardModal');
+    if (!modal) return;
+    
     document.getElementById('modalTitle').textContent = title;
     
     let html = '';
-    const details = JSON.parse(detailsJSON);
-    Object.keys(details).forEach(key => {
-        html += `
-            <div class="detail-row">
-                <span class="detail-label">${key}</span>
-                <span class="detail-value">${details[key]}</span>
-            </div>
-        `;
-    });
+    try {
+        const details = JSON.parse(detailsJSON);
+        Object.keys(details).forEach(key => {
+            html += `
+                <div class="detail-row">
+                    <span class="detail-label">${key}</span>
+                    <span class="detail-value">${details[key]}</span>
+                </div>
+            `;
+        });
+    } catch(e) {
+        html = '<p>Ошибка отображения</p>';
+    }
     
     document.getElementById('modalBody').innerHTML = html;
     modal.style.display = 'block';
@@ -501,16 +532,21 @@ function openModal(title, detailsJSON) {
 
 function closeModal(event) {
     if (event && event.target !== event.currentTarget) return;
-    document.getElementById('cardModal').style.display = 'none';
-    document.body.style.overflow = 'auto';
+    const modal = document.getElementById('cardModal');
+    if (modal) {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
 }
 
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Escape') {
+        closeModal();
+    }
 });
 
 // ============================================
-// ============ ДОБАВЛЕНИЕ ПАСПОРТА (РАСШИРЕННОЕ) ============
+// ============ ДОБАВЛЕНИЕ ПАСПОРТА ============
 // ============================================
 function addPassportFull() {
     const fields = {
@@ -530,27 +566,24 @@ function addPassportFull() {
         'Дата регистрации': document.getElementById('passport-reg-date').value.trim()
     };
     
-    // Проверяем, что заполнено хотя бы ФИО
     if (!fields['ФИО']) {
         alert('Пожалуйста, заполните ФИО!');
         return;
     }
     
-    // Сохраняем только заполненные поля
     Object.keys(fields).forEach(key => {
         if (fields[key]) {
             DATA.passport[key] = fields[key];
         }
     });
     
-    // Очищаем поля
     document.querySelectorAll('#passport-form input').forEach(input => input.value = '');
     closeAddForm('passport-form');
     renderAll();
 }
 
 // ============================================
-// ============ ОСТАЛЬНЫЕ ФУНКЦИИ ДОБАВЛЕНИЯ ============
+// ============ ДОБАВЛЕНИЕ КОНТАКТОВ ============
 // ============================================
 function addContactsField() {
     const key = document.getElementById('contacts-type').value.trim();
@@ -564,6 +597,9 @@ function addContactsField() {
     renderAll();
 }
 
+// ============================================
+// ============ ДОБАВЛЕНИЕ ДАТ ============
+// ============================================
 function addDatesField() {
     const key = document.getElementById('dates-name').value.trim();
     const value = document.getElementById('dates-value').value.trim();
@@ -576,6 +612,9 @@ function addDatesField() {
     renderAll();
 }
 
+// ============================================
+// ============ ДОБАВЛЕНИЕ КАРЬЕРЫ ============
+// ============================================
 function addCareerExperience() {
     const period = document.getElementById('career-period').value.trim();
     const position = document.getElementById('career-position').value.trim();
@@ -609,35 +648,111 @@ function addLanguageField() {
     renderAll();
 }
 
+// ============================================
+// ============ ДОБАВЛЕНИЕ СЕМЬИ ============
+// ============================================
 function addFamilyMember() {
     const name = document.getElementById('family-name').value.trim();
     const birth = document.getElementById('family-birth').value.trim();
-    const type = document.getElementById('family-type').value.trim().toLowerCase();
     const occupation = document.getElementById('family-occupation').value.trim();
-    if (!name) { alert('Введите имя!'); return; }
-    const member = { name, birthDate: birth || '—', occupation: occupation || '' };
-    if (type === 'ребенок' || type === 'ребёнок' || type === 'child') {
-        DATA.family.children.push({ id: idCounter++, ...member, gender: '' });
-    } else if (type === 'брат' || type === 'сестра' || type === 'sibling') {
-        DATA.family.siblings.push({ id: idCounter++, ...member, relationship: type });
-    } else if (type === 'отец' || type === 'папа' || type === 'father') {
-        DATA.family.parents.father = { ...member };
-    } else if (type === 'мать' || type === 'мама' || type === 'mother') {
-        DATA.family.parents.mother = { ...member };
-    } else if (type === 'супруг' || type === 'супруга' || type === 'spouse') {
-        DATA.family.spouse = { ...member };
-    } else {
-        alert('Укажите кого добавляете: ребенок, брат, сестра, отец, мать, супруг');
+    const select = document.getElementById('family-type-select');
+    let type = select ? select.value : '';
+    
+    if (type === 'другой') {
+        type = document.getElementById('family-custom-type').value.trim().toLowerCase();
+        if (!type) {
+            alert('Пожалуйста, укажите кто это!');
+            return;
+        }
+    }
+    
+    if (!name) {
+        alert('Введите имя!');
         return;
     }
+    
+    if (!type) {
+        alert('Выберите или укажите кто это!');
+        return;
+    }
+    
+    const member = { 
+        name: name, 
+        birthDate: birth || '—', 
+        occupation: occupation || '' 
+    };
+    
+    const typeLower = type.toLowerCase();
+    const relationshipMap = {
+        'отец': { target: 'father', label: 'Отец' },
+        'мать': { target: 'mother', label: 'Мать' },
+        'супруг': { target: 'spouse', label: 'Супруг' },
+        'супруга': { target: 'spouse', label: 'Супруга' },
+        'сын': { target: 'child', label: 'Сын' },
+        'дочь': { target: 'child', label: 'Дочь' },
+        'ребенок': { target: 'child', label: 'Ребенок' },
+        'брат': { target: 'sibling', label: 'Брат' },
+        'сестра': { target: 'sibling', label: 'Сестра' },
+        'дедушка': { target: 'sibling', label: 'Дедушка' },
+        'бабушка': { target: 'sibling', label: 'Бабушка' }
+    };
+    
+    const relation = relationshipMap[typeLower];
+    
+    if (relation) {
+        switch(relation.target) {
+            case 'father':
+                DATA.family.parents.father = { ...member };
+                break;
+            case 'mother':
+                DATA.family.parents.mother = { ...member };
+                break;
+            case 'spouse':
+                DATA.family.spouse = { ...member };
+                break;
+            case 'child':
+                DATA.family.children.push({ 
+                    id: idCounter++, 
+                    ...member, 
+                    gender: relation.label === 'Сын' ? 'Мужской' : relation.label === 'Дочь' ? 'Женский' : ''
+                });
+                break;
+            case 'sibling':
+                DATA.family.siblings.push({ 
+                    id: idCounter++, 
+                    ...member, 
+                    relationship: relation.label 
+                });
+                break;
+            default:
+                DATA.family.siblings.push({ 
+                    id: idCounter++, 
+                    ...member, 
+                    relationship: type 
+                });
+        }
+    } else {
+        DATA.family.siblings.push({ 
+            id: idCounter++, 
+            ...member, 
+            relationship: type 
+        });
+    }
+    
     document.getElementById('family-name').value = '';
     document.getElementById('family-birth').value = '';
-    document.getElementById('family-type').value = '';
     document.getElementById('family-occupation').value = '';
+    if (select) select.value = '';
+    document.getElementById('family-custom-type').value = '';
+    document.getElementById('family-custom-type-container').style.display = 'none';
+    
     closeAddForm('family-form');
     renderAll();
 }
 
+// ============================================
+// ============ ДОБАВЛЕНИЕ ОБРАЗОВАНИЯ ============
+// ============================================
 function addEducationField() {
     const institution = document.getElementById('edu-institution').value.trim();
     const specialty = document.getElementById('edu-specialty').value.trim();
@@ -753,6 +868,13 @@ function deleteCustomField(tabId, key) {
 // ============================================
 // ============ КАСТОМНЫЕ ВКЛАДКИ ============
 // ============================================
+function showAddTabForm() {
+    const form = document.getElementById('newtab-form');
+    if (form) {
+        form.style.display = form.style.display === 'block' ? 'none' : 'block';
+    }
+}
+
 function addNewTab() {
     const name = document.getElementById('new-tab-name').value.trim();
     if (!name) {
@@ -777,8 +899,8 @@ function addNewTab() {
 function renderCustomTabs() {
     const customFilterContainer = document.getElementById('customFilterButtons');
     const customDropdownContainer = document.getElementById('customDropdownItems');
-    customFilterContainer.innerHTML = '';
-    customDropdownContainer.innerHTML = '';
+    if (customFilterContainer) customFilterContainer.innerHTML = '';
+    if (customDropdownContainer) customDropdownContainer.innerHTML = '';
     
     if (DATA.customTabs) {
         Object.keys(DATA.customTabs).forEach(tabId => {
@@ -791,6 +913,7 @@ function renderCustomTabs() {
 
 function addCustomFilterButton(tabId, name) {
     const container = document.getElementById('customFilterButtons');
+    if (!container) return;
     const btn = document.createElement('button');
     btn.className = 'filter-btn';
     btn.textContent = '📂 ' + name;
@@ -800,9 +923,12 @@ function addCustomFilterButton(tabId, name) {
 
 function addCustomDropdownItem(tabId, name) {
     const container = document.getElementById('customDropdownItems');
+    if (!container) return;
     const btn = document.createElement('button');
     btn.textContent = '📂 ' + name;
-    btn.onclick = function() { openAddForm('custom_' + tabId); };
+    btn.onclick = function() { 
+        openAddForm('custom_' + tabId);
+    };
     container.appendChild(btn);
 }
 
