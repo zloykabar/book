@@ -41,7 +41,7 @@ h1 {
     z-index: 100;
 }
 
-/* ====== ВЫПАДАЮЩЕЕ МЕНЮ ====== */
+/* ====== ВЫПАДАЮЩЕЕ МЕНЮ "ДОБАВИТЬ" ====== */
 .add-dropdown {
     position: relative;
     display: inline-block;
@@ -252,7 +252,6 @@ h1 {
     transform: scale(1.1);
 }
 
-/* Цвета для разных типов */
 .card-item.type-passport { border-left: 4px solid #1a1a2e; }
 .card-item.type-contacts { border-left: 4px solid #17a2b8; }
 .card-item.type-dates { border-left: 4px solid #ffc107; }
@@ -297,7 +296,8 @@ h1 {
 }
 
 .add-form input,
-.add-form textarea {
+.add-form textarea,
+.add-form .form-select {
     display: block;
     width: 100%;
     padding: 10px 14px;
@@ -306,10 +306,12 @@ h1 {
     border-radius: 8px;
     font-size: 14px;
     transition: 0.3s;
+    font-family: inherit;
 }
 
 .add-form input:focus,
-.add-form textarea:focus {
+.add-form textarea:focus,
+.add-form .form-select:focus {
     outline: none;
     border-color: #1a1a2e;
 }
@@ -318,6 +320,31 @@ h1 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
+}
+
+/* ====== ВЫПАДАЮЩЕЕ МЕНЮ В ФОРМЕ ====== */
+.select-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.select-wrapper label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    margin-top: 4px;
+}
+
+.select-wrapper .form-select {
+    margin: 0;
+    appearance: auto;
+    background: white;
+    cursor: pointer;
+}
+
+.select-wrapper .form-select option {
+    padding: 8px;
 }
 
 .add-form .form-actions {
@@ -404,6 +431,7 @@ h1 {
     border: none;
     padding: 0;
     font-size: 22px;
+    color: #1a1a2e;
 }
 
 .modal-close {
@@ -498,6 +526,14 @@ h1 {
 .actions button:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.actions button:last-child {
+    background: #dc3545;
+}
+
+.actions button:last-child:hover {
+    background: #c82333;
 }
 
 /* ====== АДАПТИВ ====== */
