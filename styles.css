@@ -25,7 +25,6 @@ h1 {
     color: #1a1a2e;
 }
 
-/* ====== ВЕРХНЯЯ ПАНЕЛЬ ====== */
 .top-panel {
     display: flex;
     gap: 15px;
@@ -41,7 +40,6 @@ h1 {
     z-index: 100;
 }
 
-/* ====== ВЫПАДАЮЩЕЕ МЕНЮ "ДОБАВИТЬ" ====== */
 .add-dropdown {
     position: relative;
     display: inline-block;
@@ -130,7 +128,6 @@ h1 {
     margin: 6px 12px;
 }
 
-/* ====== КНОПКИ ФИЛЬТРОВ ====== */
 .filter-buttons {
     display: flex;
     gap: 8px;
@@ -166,7 +163,6 @@ h1 {
     flex-wrap: wrap;
 }
 
-/* ====== КОНТЕЙНЕР КАРТОЧЕК ====== */
 .cards-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -183,7 +179,6 @@ h1 {
     font-size: 18px;
 }
 
-/* ====== КАРТОЧКА ====== */
 .card-item {
     background: #f8f9fa;
     border-radius: 12px;
@@ -217,12 +212,20 @@ h1 {
     font-size: 18px;
     font-weight: 600;
     color: #1a1a2e;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 .card-item .card-sub {
     font-size: 14px;
     color: #666;
     margin-top: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
 }
 
 .card-item .card-delete {
@@ -260,9 +263,9 @@ h1 {
 .card-item.type-education { border-left: 4px solid #6f42c1; }
 .card-item.type-skill { border-left: 4px solid #fd7e14; }
 .card-item.type-language { border-left: 4px solid #20c997; }
+.card-item.type-it_instruction { border-left: 4px solid #6f42c1; }
 .card-item.type-custom { border-left: 4px solid #6c757d; }
 
-/* ====== ФОРМЫ ====== */
 .add-form {
     background: #f8f9fa;
     padding: 24px;
@@ -322,18 +325,18 @@ h1 {
     gap: 12px;
 }
 
-/* ====== ВЫПАДАЮЩЕЕ МЕНЮ В ФОРМЕ ====== */
 .select-wrapper {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    width: 100%;
 }
 
 .select-wrapper label {
     font-size: 13px;
     font-weight: 600;
     color: #555;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
 .select-wrapper .form-select {
@@ -341,10 +344,6 @@ h1 {
     appearance: auto;
     background: white;
     cursor: pointer;
-}
-
-.select-wrapper .form-select option {
-    padding: 8px;
 }
 
 .add-form .form-actions {
@@ -380,7 +379,6 @@ h1 {
     background: #c82333;
 }
 
-/* ====== МОДАЛЬНОЕ ОКНО ====== */
 .modal {
     display: none;
     position: fixed;
@@ -457,6 +455,7 @@ h1 {
     padding: 24px;
     overflow-y: auto;
     flex: 1;
+    max-height: 55vh;
 }
 
 .modal-body .detail-row {
@@ -477,6 +476,10 @@ h1 {
     color: #1a1a2e;
     font-size: 16px;
     word-break: break-word;
+    white-space: pre-wrap;
+    line-height: 1.6;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .modal-footer {
@@ -488,8 +491,6 @@ h1 {
 
 .modal-footer button {
     padding: 10px 30px;
-    background: #1a1a2e;
-    color: white;
     border: none;
     border-radius: 8px;
     font-size: 15px;
@@ -498,10 +499,9 @@ h1 {
 }
 
 .modal-footer button:hover {
-    background: #2d2d4a;
+    transform: translateY(-2px);
 }
 
-/* ====== ДЕЙСТВИЯ ====== */
 .actions {
     display: flex;
     gap: 10px;
@@ -536,56 +536,45 @@ h1 {
     background: #c82333;
 }
 
-/* ====== АДАПТИВ ====== */
 @media (max-width: 768px) {
     .top-panel {
         flex-direction: column;
         align-items: stretch;
         padding: 12px;
     }
-
     .add-dropdown {
         width: 100%;
     }
-
     .add-main-btn {
         width: 100%;
         text-align: center;
     }
-
     .dropdown-content {
         width: 100%;
         left: 0;
     }
-
     .filter-buttons {
         justify-content: center;
     }
-
     .filter-btn {
         font-size: 12px;
         padding: 6px 12px;
     }
-
     .cards-container {
         grid-template-columns: 1fr;
     }
-
     .add-form .form-row {
         grid-template-columns: 1fr;
     }
-
     .modal-content {
         margin: 20px auto;
         width: 95%;
         max-height: 90vh;
     }
-
     .modal-body .detail-row {
         flex-direction: column;
         padding: 8px 0;
     }
-
     .modal-body .detail-label {
         width: 100%;
         margin-bottom: 2px;
