@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Мой профиль - Редактор</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>📋 МОЙ ЛИЧНЫЙ ПРОФИЛЬ</h1>
+        <p style="text-align:center; color:#666; margin-bottom:20px;">Добавляй, редактируй и удаляй данные</p>
+        
+        <!-- КНОПКИ-ВКЛАДКИ -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('passport')">🇷🇺 Паспорт</button>
+            <button class="tab-btn" onclick="showTab('career')">💼 Карьера</button>
+            <button class="tab-btn" onclick="showTab('family')">👨‍👩‍👧‍👦 Семья</button>
+            <button class="tab-btn" onclick="showTab('education')">🎓 Образование</button>
+        </div>
+
+        <!-- ============ ПАСПОРТ ============ -->
+        <div id="passport" class="tab-content active">
+            <h2>🇷🇺 Паспортные данные</h2>
+            <div id="passport-data"></div>
+            <button class="add-btn" onclick="showAddForm('passport')">➕ Добавить поле</button>
+            <div id="passport-form" class="add-form" style="display:none;"></div>
+        </div>
+
+        <!-- ============ КАРЬЕРА ============ -->
+        <div id="career" class="tab-content">
+            <h2>💼 Карьера</h2>
+            <div id="career-data"></div>
+            <button class="add-btn" onclick="showAddForm('career')">➕ Добавить место работы</button>
+            <div id="career-form" class="add-form" style="display:none;"></div>
+        </div>
+
+        <!-- ============ СЕМЬЯ ============ -->
+        <div id="family" class="tab-content">
+            <h2>👨‍👩‍👧‍👦 Семья</h2>
+            <div id="family-data"></div>
+            <button class="add-btn" onclick="showAddForm('family')">➕ Добавить члена семьи</button>
+            <div id="family-form" class="add-form" style="display:none;"></div>
+        </div>
+
+        <!-- ============ ОБРАЗОВАНИЕ ============ -->
+        <div id="education" class="tab-content">
+            <h2>🎓 Образование</h2>
+            <div id="education-data"></div>
+            <button class="add-btn" onclick="showAddForm('education')">➕ Добавить образование</button>
+            <div id="education-form" class="add-form" style="display:none;"></div>
+        </div>
+
+        <!-- КНОПКИ УПРАВЛЕНИЯ -->
+        <div class="actions">
+            <button onclick="saveToFile()">💾 Скачать данные (JSON)</button>
+            <button onclick="loadFromFile()">📂 Загрузить данные (JSON)</button>
+            <button onclick="resetAll()" style="background:#dc3545;">🗑️ Сбросить всё</button>
+        </div>
+        <input type="file" id="fileInput" accept=".json" style="display:none;" onchange="handleFileUpload(event)" />
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
