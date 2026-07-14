@@ -15,6 +15,7 @@
 
         <!-- ====== ВЕРХНЯЯ ПАНЕЛЬ ====== -->
         <div class="top-panel">
+            <!-- КНОПКА ДОБАВИТЬ -->
             <div class="add-dropdown">
                 <button class="add-main-btn" onclick="toggleDropdown()">➕ Добавить</button>
                 <div class="dropdown-content" id="addDropdown">
@@ -48,6 +49,7 @@
                 </div>
             </div>
 
+            <!-- КНОПКИ ФИЛЬТРОВ -->
             <div class="filter-buttons">
                 <button class="filter-btn" onclick="filterCards('passport')">🇷🇺 Паспорт</button>
                 <button class="filter-btn" onclick="filterCards('contacts')">📱 Контакты</button>
@@ -169,16 +171,13 @@
                 </div>
             </div>
 
-            <!-- ====== СЕМЬЯ (С ВЫПАДАЮЩИМ МЕНЮ) ====== -->
+            <!-- Семья -->
             <div id="family-form" class="add-form" style="display:none;">
                 <h3>👨‍👩‍👧‍👦 Добавить члена семьи</h3>
-                
                 <div class="form-row">
                     <input id="family-name" placeholder="ФИО" />
                     <input id="family-birth" placeholder="Дата рождения" />
                 </div>
-                
-                <!-- ВЫПАДАЮЩЕЕ МЕНЮ ДЛЯ ВЫБОРА ТИПА -->
                 <div class="form-row">
                     <div class="select-wrapper">
                         <label for="family-type-select">Кто это?</label>
@@ -200,12 +199,9 @@
                     </div>
                     <input id="family-occupation" placeholder="Профессия" />
                 </div>
-                
-                <!-- Поле для ручного ввода, если выбран "Другой" -->
                 <div id="family-custom-type-container" style="display:none;">
                     <input id="family-custom-type" placeholder="Введите свой вариант (например: дядя)" />
                 </div>
-
                 <div class="form-actions">
                     <button class="save-btn" onclick="addFamilyMember()">✅ Добавить</button>
                     <button class="cancel-btn" onclick="closeAddForm('family-form')">❌ Отмена</button>
