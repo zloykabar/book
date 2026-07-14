@@ -3,61 +3,256 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Мой профиль - Редактор</title>
+    <title>Мой профиль</title>
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
     <div class="container">
         <h1>📋 МОЙ ЛИЧНЫЙ ПРОФИЛЬ</h1>
-        <p style="text-align:center; color:#666; margin-bottom:20px;">Добавляй, редактируй и удаляй данные</p>
-        
-        <!-- КНОПКИ-ВКЛАДКИ -->
-        <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('passport')">🇷🇺 Паспорт</button>
-            <button class="tab-btn" onclick="showTab('career')">💼 Карьера</button>
-            <button class="tab-btn" onclick="showTab('family')">👨‍👩‍👧‍👦 Семья</button>
-            <button class="tab-btn" onclick="showTab('education')">🎓 Образование</button>
+        <p style="text-align:center; color:#666; margin-bottom:20px;">
+            Нажми на карточку, чтобы открыть подробности
+        </p>
+
+        <!-- ====== ВЕРХНЯЯ ПАНЕЛЬ ====== -->
+        <div class="top-panel">
+            <!-- КНОПКА ДОБАВИТЬ С ВЫПАДАЮЩИМ МЕНЮ -->
+            <div class="add-dropdown">
+                <button class="add-main-btn" onclick="toggleDropdown()">➕ Добавить</button>
+                <div class="dropdown-content" id="addDropdown">
+                    <div class="dropdown-section">
+                        <div class="dropdown-title">📄 Документы</div>
+                        <button onclick="openAddForm('passport')">📇 Паспортные данные</button>
+                        <button onclick="openAddForm('contacts')">📱 Контакт</button>
+                        <button onclick="openAddForm('dates')">📅 Дату</button>
+                    </div>
+                    <div class="dropdown-section">
+                        <div class="dropdown-title">💼 Карьера</div>
+                        <button onclick="openAddForm('career')">💼 Место работы</button>
+                        <button onclick="openAddForm('skill')">🏷️ Навык</button>
+                        <button onclick="openAddForm('language')">🌍 Язык</button>
+                    </div>
+                    <div class="dropdown-section">
+                        <div class="dropdown-title">👨‍👩‍👧‍👦 Семья</div>
+                        <button onclick="openAddForm('family')">👨‍👩‍👧‍👦 Члена семьи</button>
+                    </div>
+                    <div class="dropdown-section">
+                        <div class="dropdown-title">🎓 Образование</div>
+                        <button onclick="openAddForm('education')">🎓 Образование</button>
+                        <button onclick="openAddForm('course')">📚 Курс</button>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="dropdown-section">
+                        <div class="dropdown-title">📂 Свои разделы</div>
+                        <button onclick="showAddTabForm()">➕ Новая вкладка</button>
+                        <div id="customDropdownItems"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- КНОПКИ ФИЛЬТРОВ -->
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterCards('all')">Все</button>
+                <button class="filter-btn" onclick="filterCards('passport')">🇷🇺 Паспорт</button>
+                <button class="filter-btn" onclick="filterCards('contacts')">📱 Контакты</button>
+                <button class="filter-btn" onclick="filterCards('dates')">📅 Даты</button>
+                <button class="filter-btn" onclick="filterCards('career')">💼 Карьера</button>
+                <button class="filter-btn" onclick="filterCards('family')">👨‍👩‍👧‍👦 Семья</button>
+                <button class="filter-btn" onclick="filterCards('education')">🎓 Образование</button>
+            </div>
+            <div id="customFilterButtons"></div>
         </div>
 
-        <!-- ============ ПАСПОРТ ============ -->
-        <div id="passport" class="tab-content active">
-            <h2>🇷🇺 Паспортные данные</h2>
-            <div id="passport-data"></div>
-            <button class="add-btn" onclick="showAddForm('passport')">➕ Добавить поле</button>
-            <div id="passport-form" class="add-form" style="display:none;"></div>
+        <!-- ====== ПОЛЕ С КАРТОЧКАМИ ====== -->
+        <div class="cards-container" id="cardsContainer">
+            <!-- Карточки будут отображаться здесь -->
         </div>
 
-        <!-- ============ КАРЬЕРА ============ -->
-        <div id="career" class="tab-content">
-            <h2>💼 Карьера</h2>
-            <div id="career-data"></div>
-            <button class="add-btn" onclick="showAddForm('career')">➕ Добавить место работы</button>
-            <div id="career-form" class="add-form" style="display:none;"></div>
+        <!-- ====== ФОРМЫ ДОБАВЛЕНИЯ ====== -->
+        <div id="formsContainer">
+            <!-- ====== ПАСПОРТ (РАСШИРЕННАЯ ФОРМА) ====== -->
+            <div id="passport-form" class="add-form" style="display:none;">
+                <h3>📇 Паспортные данные</h3>
+                
+                <div class="form-section">
+                    <label>Основные данные</label>
+                    <div class="form-row">
+                        <input id="passport-fullname" placeholder="ФИО полностью" />
+                        <input id="passport-birthdate" placeholder="Дата рождения (ДД.ММ.ГГГГ)" />
+                    </div>
+                    <div class="form-row">
+                        <input id="passport-birthplace" placeholder="Место рождения" />
+                        <input id="passport-gender" placeholder="Пол (Мужской/Женский)" />
+                    </div>
+                    <input id="passport-nationality" placeholder="Гражданство" />
+                </div>
+
+                <div class="form-section">
+                    <label>Документ</label>
+                    <div class="form-row">
+                        <input id="passport-seria" placeholder="Серия (например: 45 12)" />
+                        <input id="passport-number" placeholder="Номер" />
+                    </div>
+                    <div class="form-row">
+                        <input id="passport-issued-by" placeholder="Кем выдан" />
+                        <input id="passport-issue-date" placeholder="Дата выдачи (ДД.ММ.ГГГГ)" />
+                    </div>
+                    <div class="form-row">
+                        <input id="passport-expiry-date" placeholder="Срок действия (ДД.ММ.ГГГГ)" />
+                        <input id="passport-code" placeholder="Код подразделения" />
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <label>Регистрация</label>
+                    <div class="form-row">
+                        <input id="passport-reg-city" placeholder="Город" />
+                        <input id="passport-reg-street" placeholder="Улица, дом, квартира" />
+                    </div>
+                    <input id="passport-reg-date" placeholder="Дата регистрации (ДД.ММ.ГГГГ)" />
+                </div>
+
+                <div class="form-actions">
+                    <button class="save-btn" onclick="addPassportFull()">✅ Добавить</button>
+                    <button class="cancel-btn" onclick="closeAddForm('passport-form')">❌ Отмена</button>
+                </div>
+            </div>
+
+            <!-- Контакты -->
+            <div id="contacts-form" class="add-form" style="display:none;">
+                <h3>📱 Добавить контакт</h3>
+                <div class="form-row">
+                    <input id="contacts-type" placeholder="Тип (Телефон, Email, Telegram...)" />
+                    <input id="contacts-value" placeholder="Значение" />
+                </div>
+                <div class="form-actions">
+                    <button class="save-btn" onclick="addContactsField()">✅ Добавить</button>
+                    <button class="cancel-btn" onclick="closeAddForm('contacts-form')">❌ Отмена</button>
+                </div>
+            </div>
+
+            <!-- Даты -->
+            <div id="dates-form" class="add-form" style="display:none;">
+                <h3>📅 Добавить дату</h3>
+                <div class="form-row">
+                    <input id="dates-name" placeholder="Название события" />
+                    <input id="dates-value" placeholder="Дата (ДД.ММ.ГГГГ)" />
+                </div>
+                <div class="form-actions">
+                    <button class="save-btn" onclick="addDatesField()">✅ Добавить</button>
+                    <button class="cancel-btn" onclick="closeAddForm('dates-form')">❌ Отмена</button>
+                </div>
+            </div>
+
+            <!-- Карьера -->
+            <div id="career-form" class="add-form" style="display:none;">
+                <h3>💼 Добавить место работы</h3>
+                <input id="career-period" placeholder="Период (например: 2020–н.в.)" />
+                <input id="career-position" placeholder="Должность" />
+                <input id="career-company" placeholder="Компания" />
+                <textarea id="career-responsibilities" placeholder="Обязанности" rows="2"></textarea>
+                <div class="form-actions">
+                    <button class="save-btn" onclick="addCareerExperience()">✅ Добавить</button>
+                    <button class="cancel-btn" onclick="closeAddForm('career-form')">❌ Отмена</button>
+                </div>
+            </div>
+
+            <!-- Навык -->
+            <div id="skill-form" class="add-form" style="display:none;">
+                <h3>🏷️ Добавить навык</h3>
+                <input id="skill-name" placeholder="Название навыка" />
+                <div class="form-actions">
+                    <button class="save-btn" onclick="addSkillField()">✅ Добавить</button>
+                    <button class="cancel-btn" onclick="closeAddForm('skill-form')">❌ Отмена</button>
+                </div>
+            </div>
+
+            <!-- Язык -->
+            <div id="language-form" class="add-form" style="display:none;">
+                <h3>🌍 Добавить язык</h3>
+                <input id="language-name" placeholder="Название языка" />
+                <div class="form-actions">
+                    <button class="save-btn" onclick="addLanguageField()">✅ Добавить</button>
+                    <button class="cancel-btn" onclick="closeAddForm('language-form')">❌ Отмена</button>
+                </div>
+            </div>
+
+            <!-- Семья -->
+            <div id="family-form" class="add-form" style="display:none;">
+                <h3>👨‍👩‍👧‍👦 Добавить члена семьи</h3>
+                <div class="form-row">
+                    <input id="family-name" placeholder="ФИО" />
+                    <input id="family-birth" placeholder="Дата рождения" />
+                </div>
+                <input id="family-type" placeholder="Кто? (ребенок, брат, сестра, отец, мать, супруг)" />
+                <input id="family-occupation" placeholder="Профессия" />
+                <div class="form-actions">
+                    <button class="save-btn" onclick="addFamilyMember()">✅ Добавить</button>
+                    <button class="cancel-btn" onclick="closeAddForm('family-form')">❌ Отмена</button>
+                </div>
+            </div>
+
+            <!-- Образование -->
+            <div id="education-form" class="add-form" style="display:none;">
+                <h3>🎓 Добавить образование</h3>
+                <div class="form-row">
+                    <input id="edu-institution" placeholder="Учебное заведение" />
+                    <input id="edu-specialty" placeholder="Специальность" />
+                </div>
+                <div class="form-row">
+                    <input id="edu-degree" placeholder="Степень" />
+                    <input id="edu-year" placeholder="Год окончания" />
+                </div>
+                <div class="form-actions">
+                    <button class="save-btn" onclick="addEducationField()">✅ Добавить</button>
+                    <button class="cancel-btn" onclick="closeAddForm('education-form')">❌ Отмена</button>
+                </div>
+            </div>
+
+            <!-- Курс -->
+            <div id="course-form" class="add-form" style="display:none;">
+                <h3>📚 Добавить курс</h3>
+                <div class="form-row">
+                    <input id="course-name" placeholder="Название курса" />
+                    <input id="course-platform" placeholder="Платформа" />
+                </div>
+                <div class="form-actions">
+                    <button class="save-btn" onclick="addCourseField()">✅ Добавить</button>
+                    <button class="cancel-btn" onclick="closeAddForm('course-form')">❌ Отмена</button>
+                </div>
+            </div>
+
+            <!-- Новая вкладка -->
+            <div id="newtab-form" class="add-form" style="display:none;">
+                <h3>📂 Создать новую вкладку</h3>
+                <input id="new-tab-name" placeholder="Название вкладки" />
+                <div class="form-actions">
+                    <button class="save-btn" onclick="addNewTab()">✅ Создать</button>
+                    <button class="cancel-btn" onclick="closeAddForm('newtab-form')">❌ Отмена</button>
+                </div>
+            </div>
         </div>
 
-        <!-- ============ СЕМЬЯ ============ -->
-        <div id="family" class="tab-content">
-            <h2>👨‍👩‍👧‍👦 Семья</h2>
-            <div id="family-data"></div>
-            <button class="add-btn" onclick="showAddForm('family')">➕ Добавить члена семьи</button>
-            <div id="family-form" class="add-form" style="display:none;"></div>
-        </div>
-
-        <!-- ============ ОБРАЗОВАНИЕ ============ -->
-        <div id="education" class="tab-content">
-            <h2>🎓 Образование</h2>
-            <div id="education-data"></div>
-            <button class="add-btn" onclick="showAddForm('education')">➕ Добавить образование</button>
-            <div id="education-form" class="add-form" style="display:none;"></div>
-        </div>
-
-        <!-- КНОПКИ УПРАВЛЕНИЯ -->
+        <!-- ====== КНОПКИ УПРАВЛЕНИЯ ====== -->
         <div class="actions">
             <button onclick="saveToFile()">💾 Скачать данные (JSON)</button>
             <button onclick="loadFromFile()">📂 Загрузить данные (JSON)</button>
             <button onclick="resetAll()" style="background:#dc3545;">🗑️ Сбросить всё</button>
         </div>
         <input type="file" id="fileInput" accept=".json" style="display:none;" onchange="handleFileUpload(event)" />
+    </div>
+
+    <!-- ====== МОДАЛЬНОЕ ОКНО ====== -->
+    <div id="cardModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 id="modalTitle">Подробности</h2>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button onclick="closeModal()">Закрыть</button>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
