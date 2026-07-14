@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Мой профиль</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
@@ -15,7 +15,6 @@
 
         <!-- ====== ВЕРХНЯЯ ПАНЕЛЬ ====== -->
         <div class="top-panel">
-            <!-- КНОПКА ДОБАВИТЬ -->
             <div class="add-dropdown">
                 <button class="add-main-btn" onclick="toggleDropdown()">➕ Добавить</button>
                 <div class="dropdown-content" id="addDropdown">
@@ -49,7 +48,6 @@
                 </div>
             </div>
 
-            <!-- КНОПКИ ФИЛЬТРОВ -->
             <div class="filter-buttons">
                 <button class="filter-btn" onclick="filterCards('passport')">🇷🇺 Паспорт</button>
                 <button class="filter-btn" onclick="filterCards('contacts')">📱 Контакты</button>
@@ -61,10 +59,8 @@
             <div id="customFilterButtons"></div>
         </div>
 
-        <!-- ====== ПОЛЕ С КАРТОЧКАМИ ====== -->
-        <div class="cards-container" id="cardsContainer">
-            <!-- Карточки будут отображаться здесь -->
-        </div>
+        <!-- ====== КАРТОЧКИ ====== -->
+        <div class="cards-container" id="cardsContainer"></div>
 
         <!-- ====== ФОРМЫ ДОБАВЛЕНИЯ ====== -->
         <div id="formsContainer">
@@ -74,37 +70,37 @@
                 <div class="form-section">
                     <label>Основные данные</label>
                     <div class="form-row">
-                        <input id="passport-fullname" placeholder="ФИО полностью" />
-                        <input id="passport-birthdate" placeholder="Дата рождения (ДД.ММ.ГГГГ)" />
+                        <input id="passport-fullname" placeholder="ФИО полностью">
+                        <input id="passport-birthdate" placeholder="Дата рождения (ДД.ММ.ГГГГ)">
                     </div>
                     <div class="form-row">
-                        <input id="passport-birthplace" placeholder="Место рождения" />
-                        <input id="passport-gender" placeholder="Пол (Мужской/Женский)" />
+                        <input id="passport-birthplace" placeholder="Место рождения">
+                        <input id="passport-gender" placeholder="Пол (Мужской/Женский)">
                     </div>
-                    <input id="passport-nationality" placeholder="Гражданство" />
+                    <input id="passport-nationality" placeholder="Гражданство">
                 </div>
                 <div class="form-section">
                     <label>Документ</label>
                     <div class="form-row">
-                        <input id="passport-seria" placeholder="Серия (например: 45 12)" />
-                        <input id="passport-number" placeholder="Номер" />
+                        <input id="passport-seria" placeholder="Серия (например: 45 12)">
+                        <input id="passport-number" placeholder="Номер">
                     </div>
                     <div class="form-row">
-                        <input id="passport-issued-by" placeholder="Кем выдан" />
-                        <input id="passport-issue-date" placeholder="Дата выдачи (ДД.ММ.ГГГГ)" />
+                        <input id="passport-issued-by" placeholder="Кем выдан">
+                        <input id="passport-issue-date" placeholder="Дата выдачи (ДД.ММ.ГГГГ)">
                     </div>
                     <div class="form-row">
-                        <input id="passport-expiry-date" placeholder="Срок действия (ДД.ММ.ГГГГ)" />
-                        <input id="passport-code" placeholder="Код подразделения" />
+                        <input id="passport-expiry-date" placeholder="Срок действия (ДД.ММ.ГГГГ)">
+                        <input id="passport-code" placeholder="Код подразделения">
                     </div>
                 </div>
                 <div class="form-section">
                     <label>Регистрация</label>
                     <div class="form-row">
-                        <input id="passport-reg-city" placeholder="Город" />
-                        <input id="passport-reg-street" placeholder="Улица, дом, квартира" />
+                        <input id="passport-reg-city" placeholder="Город">
+                        <input id="passport-reg-street" placeholder="Улица, дом, квартира">
                     </div>
-                    <input id="passport-reg-date" placeholder="Дата регистрации (ДД.ММ.ГГГГ)" />
+                    <input id="passport-reg-date" placeholder="Дата регистрации (ДД.ММ.ГГГГ)">
                 </div>
                 <div class="form-actions">
                     <button class="save-btn" onclick="addPassportFull()">✅ Добавить</button>
@@ -116,8 +112,8 @@
             <div id="contacts-form" class="add-form" style="display:none;">
                 <h3>📱 Добавить контакт</h3>
                 <div class="form-row">
-                    <input id="contacts-type" placeholder="Тип (Телефон, Email, Telegram...)" />
-                    <input id="contacts-value" placeholder="Значение" />
+                    <input id="contacts-type" placeholder="Тип (Телефон, Email, Telegram...)">
+                    <input id="contacts-value" placeholder="Значение">
                 </div>
                 <div class="form-actions">
                     <button class="save-btn" onclick="addContactsField()">✅ Добавить</button>
@@ -129,8 +125,8 @@
             <div id="dates-form" class="add-form" style="display:none;">
                 <h3>📅 Добавить дату</h3>
                 <div class="form-row">
-                    <input id="dates-name" placeholder="Название события" />
-                    <input id="dates-value" placeholder="Дата (ДД.ММ.ГГГГ)" />
+                    <input id="dates-name" placeholder="Название события">
+                    <input id="dates-value" placeholder="Дата (ДД.ММ.ГГГГ)">
                 </div>
                 <div class="form-actions">
                     <button class="save-btn" onclick="addDatesField()">✅ Добавить</button>
@@ -141,9 +137,9 @@
             <!-- Карьера -->
             <div id="career-form" class="add-form" style="display:none;">
                 <h3>💼 Добавить место работы</h3>
-                <input id="career-period" placeholder="Период (например: 2020–н.в.)" />
-                <input id="career-position" placeholder="Должность" />
-                <input id="career-company" placeholder="Компания" />
+                <input id="career-period" placeholder="Период (например: 2020–н.в.)">
+                <input id="career-position" placeholder="Должность">
+                <input id="career-company" placeholder="Компания">
                 <textarea id="career-responsibilities" placeholder="Обязанности" rows="2"></textarea>
                 <div class="form-actions">
                     <button class="save-btn" onclick="addCareerExperience()">✅ Добавить</button>
@@ -154,7 +150,7 @@
             <!-- Навык -->
             <div id="skill-form" class="add-form" style="display:none;">
                 <h3>🏷️ Добавить навык</h3>
-                <input id="skill-name" placeholder="Название навыка" />
+                <input id="skill-name" placeholder="Название навыка">
                 <div class="form-actions">
                     <button class="save-btn" onclick="addSkillField()">✅ Добавить</button>
                     <button class="cancel-btn" onclick="closeAddForm('skill-form')">❌ Отмена</button>
@@ -164,7 +160,7 @@
             <!-- Язык -->
             <div id="language-form" class="add-form" style="display:none;">
                 <h3>🌍 Добавить язык</h3>
-                <input id="language-name" placeholder="Название языка" />
+                <input id="language-name" placeholder="Название языка">
                 <div class="form-actions">
                     <button class="save-btn" onclick="addLanguageField()">✅ Добавить</button>
                     <button class="cancel-btn" onclick="closeAddForm('language-form')">❌ Отмена</button>
@@ -175,8 +171,8 @@
             <div id="family-form" class="add-form" style="display:none;">
                 <h3>👨‍👩‍👧‍👦 Добавить члена семьи</h3>
                 <div class="form-row">
-                    <input id="family-name" placeholder="ФИО" />
-                    <input id="family-birth" placeholder="Дата рождения" />
+                    <input id="family-name" placeholder="ФИО">
+                    <input id="family-birth" placeholder="Дата рождения">
                 </div>
                 <div class="form-row">
                     <div class="select-wrapper">
@@ -197,10 +193,10 @@
                             <option value="другой">👤 Другой</option>
                         </select>
                     </div>
-                    <input id="family-occupation" placeholder="Профессия" />
+                    <input id="family-occupation" placeholder="Профессия">
                 </div>
                 <div id="family-custom-type-container" style="display:none;">
-                    <input id="family-custom-type" placeholder="Введите свой вариант (например: дядя)" />
+                    <input id="family-custom-type" placeholder="Введите свой вариант (например: дядя)">
                 </div>
                 <div class="form-actions">
                     <button class="save-btn" onclick="addFamilyMember()">✅ Добавить</button>
@@ -212,12 +208,12 @@
             <div id="education-form" class="add-form" style="display:none;">
                 <h3>🎓 Добавить образование</h3>
                 <div class="form-row">
-                    <input id="edu-institution" placeholder="Учебное заведение" />
-                    <input id="edu-specialty" placeholder="Специальность" />
+                    <input id="edu-institution" placeholder="Учебное заведение">
+                    <input id="edu-specialty" placeholder="Специальность">
                 </div>
                 <div class="form-row">
-                    <input id="edu-degree" placeholder="Степень" />
-                    <input id="edu-year" placeholder="Год окончания" />
+                    <input id="edu-degree" placeholder="Степень">
+                    <input id="edu-year" placeholder="Год окончания">
                 </div>
                 <div class="form-actions">
                     <button class="save-btn" onclick="addEducationField()">✅ Добавить</button>
@@ -229,8 +225,8 @@
             <div id="course-form" class="add-form" style="display:none;">
                 <h3>📚 Добавить курс</h3>
                 <div class="form-row">
-                    <input id="course-name" placeholder="Название курса" />
-                    <input id="course-platform" placeholder="Платформа" />
+                    <input id="course-name" placeholder="Название курса">
+                    <input id="course-platform" placeholder="Платформа">
                 </div>
                 <div class="form-actions">
                     <button class="save-btn" onclick="addCourseField()">✅ Добавить</button>
@@ -241,7 +237,7 @@
             <!-- Новая вкладка -->
             <div id="newtab-form" class="add-form" style="display:none;">
                 <h3>📂 Создать новую вкладку</h3>
-                <input id="new-tab-name" placeholder="Название вкладки" />
+                <input id="new-tab-name" placeholder="Название вкладки">
                 <div class="form-actions">
                     <button class="save-btn" onclick="addNewTab()">✅ Создать</button>
                     <button class="cancel-btn" onclick="closeAddForm('newtab-form')">❌ Отмена</button>
@@ -255,10 +251,10 @@
             <button onclick="loadFromFile()">📂 Загрузить данные (JSON)</button>
             <button onclick="resetAll()" style="background:#dc3545;">🗑️ Сбросить всё</button>
         </div>
-        <input type="file" id="fileInput" accept=".json" style="display:none;" onchange="handleFileUpload(event)" />
+        <input type="file" id="fileInput" accept=".json" style="display:none;" onchange="handleFileUpload(event)">
     </div>
 
-    <!-- ====== МОДАЛЬНОЕ ОКНО ====== -->
+    <!-- ====== МОДАЛЬНОЕ ОКНО ДЛЯ ПРОСМОТРА ====== -->
     <div id="cardModal" class="modal" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-header">
@@ -267,7 +263,23 @@
             </div>
             <div class="modal-body" id="modalBody"></div>
             <div class="modal-footer">
+                <button onclick="openEditModal()" style="background:#ffc107; color:#000; margin-right:10px;">✏️ Редактировать</button>
                 <button onclick="closeModal()">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== МОДАЛЬНОЕ ОКНО ДЛЯ РЕДАКТИРОВАНИЯ ====== -->
+    <div id="editModal" class="modal" onclick="closeEditModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2>✏️ Редактировать</h2>
+                <button class="modal-close" onclick="closeEditModal()">✕</button>
+            </div>
+            <div class="modal-body" id="editModalBody"></div>
+            <div class="modal-footer">
+                <button onclick="saveEdit()" style="background:#28a745;">💾 Сохранить</button>
+                <button onclick="closeEditModal()">❌ Отмена</button>
             </div>
         </div>
     </div>
